@@ -19,7 +19,7 @@ app.get("/caja", function(req, res) {
 
     let caja = req.body.caja || '';
 
-    Caja.find({ caja: caja, anio: aniodesde }, 'caja fecha hora')
+    Caja.find({ caja: caja, anio: aniodesde, anio: aniohasta }, 'caja fecha hora')
         .skip(desde)
         .limit(limite)
         .exec((err, cajas) => {
@@ -30,7 +30,7 @@ app.get("/caja", function(req, res) {
                 });
             }
 
-            Caja.count({ caja: caja, anio: aniodesde }, (err, conteo) => {
+            Caja.count({ caja: caja, anio: aniodesde, anio: aniohasta }, (err, conteo) => {
                 res.json({
                     ok: true,
                     registros: conteo,
