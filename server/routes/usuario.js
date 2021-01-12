@@ -32,5 +32,34 @@ app.post("/caja", function(req, res) {
 
 });
 
+app.delete("/caja/:id", function(req, res) {
+    let id = req.params.id;
+
+    Caja.findByIdAndDelete(id, (err, cajaDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err,
+            });
+        }
+
+        if (!cajaDB) {
+            return res.status(400).json({
+                ok: false,
+                error: {
+                    message: 'No encontrado en la BDD'
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            message: 'Ha sido eliminado'
+        });
+
+    });
+
+});
+
 
 module.exports = app;
