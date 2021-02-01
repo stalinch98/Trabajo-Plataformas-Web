@@ -1,6 +1,7 @@
 const express = require("express");
 const Caja = require("../models/caja");
 const dateTime = require('node-datetime');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -31,10 +32,15 @@ app.get("/caja", function(req, res) {
             }
 
             Caja.count({ caja: caja, anio: aniodesde, anio: aniohasta }, (err, conteo) => {
+                // Genrar el token
+                let token = jwt.sign({
+                        cajas: cajas
+                    }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN })
+                    // Si todo va bien
                 res.json({
                     ok: true,
                     registros: conteo,
-                    cajas
+                    token
                 });
             });
         });
@@ -65,10 +71,14 @@ app.post("/caja", function(req, res) {
                 err,
             });
         }
-
+        // Genrar el token
+        let token = jwt.sign({
+                cajas: cajaDB
+            }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN })
+            // Si todo va bien
         res.json({
             ok: true,
-            usuario: cajaDB
+            token
         });
     });
 
